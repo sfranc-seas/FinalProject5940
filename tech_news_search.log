@@ -1,0 +1,18 @@
+[2026-04-09 16:25:01] INFO Application starting
+[2026-04-09 16:25:01] INFO Loading articles from: articles_small.csv
+[2026-04-09 16:25:01] ERROR Fatal startup error: Error parsing CSV file
+[2026-04-09 16:25:01] INFO Application exiting
+[2026-04-09 16:31:33] INFO Application starting
+[2026-04-09 16:31:33] INFO Loading articles from: articles_small.csv
+[2026-04-09 16:32:48] ERROR Fatal startup error: Error parsing CSV file
+[2026-04-09 16:32:48] INFO Application exiting
+[2026-04-09 16:32:55] INFO Application starting
+[2026-04-09 16:32:55] INFO Loading articles from: articles_small.csv
+[2026-04-09 16:34:19] INFO Application starting
+[2026-04-09 16:34:19] INFO Loading articles from: articles_small.csv
+[2026-04-09 16:34:19] INFO Loaded 100 articles from articles_small.csv
+[2026-04-09 16:34:19] INFO Architecture initialization complete
+[2026-04-09 16:37:25] INFO Application starting
+[2026-04-09 16:37:25] INFO Loading articles from: articles_small.csv
+[2026-04-09 16:38:18] INFO Loaded 100 articles from articles_small.csv
+[2026-04-09 16:38:18] INFO Architecture initialization complete
