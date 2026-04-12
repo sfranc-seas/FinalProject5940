@@ -1,6 +1,9 @@
 package edu.upenn.cit5940.ui;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import edu.upenn.cit5940.common.dto.Article;
@@ -86,13 +89,204 @@ public class CLI {
     }
 
     private void runInteractiveMode() {
+        boolean inInteractive = true;
+        while (inInteractive) {
+            printInteractiveMenu();
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("Please enter a choice.");
+                continue;
+            }
+
+            switch (input) {
+                case "1": interactiveSearch(); break;
+                case "2": interactiveAutocomplete(); break;
+                case "3": interactiveTopics(); break;
+                case "4": interactiveTrends(); break;
+                case "5": interactiveArticlesByDate(); break;
+                case "6": interactiveArticleById(); break;
+                case "7": interactiveStats(); break;
+                case "8": inInteractive = false; break;
+                default:
+                    if (input.matches("\\d+")) {
+                        System.out.println("Invalid choice. Please enter 1-8.");
+                    } else {
+                        System.out.println("Please enter a valid number (1-8).");
+                    }
+            }
+        }
+    }
+    
+    private void printInteractiveMenu() {
         System.out.println();
         System.out.println("==================================================");
-        System.out.println("              INTERACTIVE MODE");
+        System.out.println("               INTERACTIVE MODE");
         System.out.println("==================================================");
-        System.out.println("Interactive mode is not implemented yet.");
-        System.out.println("Press Enter to return to the main menu...");
+        System.out.println("This mode will guide you through each operation step by step.");
+        System.out.println("----------------------------------------");
+        System.out.println("             AVAILABLE SERVICES");
+        System.out.println("----------------------------------------");
+        System.out.println("1. Search Articles");
+        System.out.println("2. Get Autocomplete Suggestions");
+        System.out.println("3. View Top Topics");
+        System.out.println("4. Analyze Topic Trends");
+        System.out.println("5. Browse Articles by Date");
+        System.out.println("6. View Specific Article by ID");
+        System.out.println("7. Show Statistics");
+        System.out.println("8. Back to Main Menu");
+        System.out.println("----------------------------------------");
+        System.out.print("Select a service (1-8): ");
+    }
+    
+    private void interactiveSearch() {
+        System.out.print("Enter search keyword(s): ");
+        String query = scanner.nextLine().trim();
+        logger.logInfo("Interactive search query: " + query);
+        if (query.isEmpty()) {
+            System.out.println("Usage: search <keyword>");
+        } else {
+            List<String> titles = searchService.searchTitles(query);
+            if (titles.isEmpty()) {
+                System.out.println("No articles found.");
+            } else {
+                for (String title : titles) System.out.println(title);
+            }
+        }
+        returnToMenu();
+    }
+
+    private void interactiveAutocomplete() {
+        System.out.print("Enter prefix for autocomplete: ");
+        String prefix = scanner.nextLine().trim();
+        logger.logInfo("Interactive autocomplete prefix: " + prefix);
+        if (prefix.isEmpty()) {
+            System.out.println("Usage: autocomplete <prefix>");
+        } else {
+            List<String> suggestions = autocompleteService.getSuggestions(prefix);
+            if (suggestions.isEmpty()) {
+                System.out.println("No suggestions found.");
+            } else {
+                for (String s : suggestions) System.out.println(s);
+            }
+        }
+        returnToMenu();
+    }
+
+    private void interactiveTopics() {
+        System.out.print("Enter period (YYYY-MM): ");
+        String period = scanner.nextLine().trim();
+        logger.logInfo("Interactive topics period: " + period);
+        if (!isValidPeriod(period)) {
+            System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
+        } else {
+            List<String> topics = topicService.getTopTopics(period);
+            if (topics.isEmpty()) {
+                System.out.println("No topics found.");
+            } else {
+                for (String t : topics) System.out.println(t);
+            }
+        }
+        returnToMenu();
+    }
+
+    private void interactiveTrends() {
+        System.out.print("Enter topic word: ");
+        String topic = scanner.nextLine().trim();
+        System.out.print("Enter start period (YYYY-MM): ");
+        String start = scanner.nextLine().trim();
+        System.out.print("Enter end period (YYYY-MM): ");
+        String end = scanner.nextLine().trim();
+        logger.logInfo("Interactive trends: topic=" + topic + " start=" + start + " end=" + end);
+
+        if (!isValidPeriod(start) || !isValidPeriod(end)) {
+            System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
+        } else if (start.compareTo(end) > 0) {
+            System.out.println("Error: Invalid date provided. Start period cannot be after end period.");
+        } else {
+            Map<String, Integer> trends = topicService.getTrends(topic, start, end);
+            for (Map.Entry<String, Integer> e : trends.entrySet()) {
+                System.out.println(e.getKey() + ": " + e.getValue());
+            }
+        }
+        returnToMenu();
+    }
+
+    private void interactiveArticlesByDate() {
+        System.out.print("Enter start date (YYYY-MM-DD): ");
+        String startDate = scanner.nextLine().trim();
+        System.out.print("Enter end date (YYYY-MM-DD): ");
+        String endDate = scanner.nextLine().trim();
+        logger.logInfo("Interactive articles range: " + startDate + " to " + endDate);
+
+        if (!isValidDate(startDate) || !isValidDate(endDate)) {
+            System.out.println("Error: Invalid date provided. Please use the YYYY-MM-DD format with valid values.");
+        } else if (LocalDate.parse(startDate).isAfter(LocalDate.parse(endDate))) {
+            System.out.println("Error: Invalid date provided. Start date cannot be after end date.");
+        } else {
+            List<String> titles = articleDateService.getArticleTitlesInRange(startDate, endDate);
+            if (titles.isEmpty()) {
+                System.out.println("No articles found.");
+            } else {
+                for (String t : titles) System.out.println(t);
+            }
+        }
+        returnToMenu();
+    }
+
+    private void interactiveArticleById() {
+        System.out.print("Enter article ID (URI): ");
+        String id = scanner.nextLine().trim();
+        logger.logInfo("Interactive article lookup: " + id);
+        if (id.isEmpty()) {
+            System.out.println("Usage: article <id>");
+        } else {
+            Article article = searchService.getArticleById(id);
+            if (article == null) {
+                System.out.println("No articles found.");
+            } else {
+                printArticle(article);
+            }
+        }
+        returnToMenu();
+    }
+
+    private void interactiveStats() {
+        System.out.println("Total number of articles: " + searchService.getTotalArticleCount());
+        returnToMenu();
+    }
+    
+    private void returnToMenu() {
+        System.out.println();
+        System.out.print("Press Enter to return to the menu...");
         scanner.nextLine();
+    }
+    
+    private boolean isValidDate(String dateText) {
+        if (dateText == null || !dateText.matches("\\d{4}-\\d{2}-\\d{2}")) return false;
+        try {
+            LocalDate.parse(dateText);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+    
+    private boolean isValidPeriod(String period) {
+        if (period == null || !period.matches("\\d{4}-\\d{2}")) return false;
+        try {
+            int month = Integer.parseInt(period.substring(5, 7));
+            return month >= 1 && month <= 12;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+    
+    private void printArticle(Article article) {
+        System.out.println("ID: " + article.getId());
+        System.out.println("Date: " + article.getDate());
+        System.out.println("Title: " + article.getTitle());
+        System.out.println("Body: " + article.getBody());
     }
 
     private void runCommandMode() {
@@ -120,14 +314,16 @@ public class CLI {
                 inCommandMode = false;
             } else if (commandLine.equalsIgnoreCase("help")) {
                 printCommandHelp();
+            } else if (commandLine.equalsIgnoreCase("stats")) {
+                handleStats();
             } else if (commandLine.toLowerCase().startsWith("search ")) {
                 handleSearch(commandLine);
             } else if (commandLine.toLowerCase().startsWith("autocomplete ")) {
                 handleAutocomplete(commandLine);
+            }  else if (commandLine.toLowerCase().startsWith("trends ")) {
+                handleTrends(commandLine.substring(7).trim());            
             } else if (commandLine.toLowerCase().startsWith("article ")) {
                 handleArticle(commandLine);
-            } else if (commandLine.equalsIgnoreCase("stats")) {
-                handleStats();
             } else if (commandLine.toLowerCase().startsWith("topics ")) {
                 handleTopics(commandLine);            
             } else if (commandLine.toLowerCase().startsWith("articles ")) {
@@ -135,6 +331,31 @@ public class CLI {
             } else {
                 System.out.println("Unknown command. Type 'help' for available commands.");
             }
+        }
+    }
+    
+    private void handleTrends(String args) {
+        String[] parts = args.split("\\s+");
+        if (parts.length < 3) {
+            System.out.println("Usage: trends <topic> <start-YYYY-MM> <end-YYYY-MM>");
+            return;
+        }
+        String topic = parts[0];
+        String start = parts[1];
+        String end = parts[2];
+        logger.logInfo("Trends query: topic=" + topic + " start=" + start + " end=" + end);
+
+        if (!isValidPeriod(start) || !isValidPeriod(end)) {
+            System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
+            return;
+        }
+        if (start.compareTo(end) > 0) {
+            System.out.println("Error: Invalid date provided. Start period cannot be after end period.");
+            return;
+        }
+        Map<String, Integer> trends = topicService.getTrends(topic, start, end);
+        for (Map.Entry<String, Integer> e : trends.entrySet()) {
+            System.out.println(e.getKey() + ": " + e.getValue());
         }
     }
     
@@ -263,40 +484,52 @@ public class CLI {
     }
     
     private void handleStats() {
+    	logger.logInfo("Stats command");
         System.out.println("Total number of articles: " + searchService.getTotalArticleCount());
     }
 
     private void printHelpMenu() {
         System.out.println();
-        System.out.println("==================================================");
-        System.out.println("            HELP & DOCUMENTATION");
-        System.out.println("==================================================");
+        System.out.println("============================================================");
+        System.out.println("             HELP & DOCUMENTATION");
+        System.out.println("============================================================");
         System.out.println("INTERACTIVE MODE:");
-        System.out.println("  Guided step-by-step interface.");
+        System.out.println("  * Guided step-by-step interface");
+        System.out.println("  * Prompts for all required inputs");
+        System.out.println("  * Perfect for beginners");
         System.out.println();
         System.out.println("COMMAND MODE:");
-        System.out.println("  Enter commands directly.");
-        System.out.println("  Type 'help' for available commands.");
+        System.out.println("  * Direct command entry");
+        System.out.println("  * Faster for experienced users");
+        System.out.println("  * Type 'help' for command list");
         System.out.println();
         System.out.println("AVAILABLE SERVICES:");
-        System.out.println("  Search Articles");
-        System.out.println("  Autocomplete");
-        System.out.println("  View Article");
-        System.out.println("  Statistics");
+        System.out.println("  1. Search Articles   - Find articles by keywords");
+        System.out.println("  2. Autocomplete      - Get search suggestions");
+        System.out.println("  3. Top Topics        - View trending topics by period");
+        System.out.println("  4. Topic Trends      - Analyze topic popularity over time");
+        System.out.println("  5. Browse Articles   - Filter articles by date range");
+        System.out.println("  6. View Article      - Get detailed article information");
+        System.out.println("  7. Statistics        - View database statistics");
         System.out.println();
-        System.out.println("Press Enter to return to the main menu...");
+        System.out.println("DATE FORMATS:");
+        System.out.println("  * Period: YYYY-MM (e.g., 2023-12)");
+        System.out.println("  * Date:   YYYY-MM-DD (e.g., 2023-12-01)");
+        System.out.println();
+        System.out.print("Press Enter to return to the main menu...");
         scanner.nextLine();
     }
 
     private void printCommandHelp() {
         System.out.println("Available commands:");
-        System.out.println("search <keywords>");
-        System.out.println("autocomplete <prefix>");
-        System.out.println("articles <start_date> <end_date>");
-        System.out.println("article <id>");
-        System.out.println("stats");
-        System.out.println("topics <period>");
-        System.out.println("help");
-        System.out.println("menu");        
+        System.out.println("  search <keywords>              - Search articles by keyword(s)");
+        System.out.println("  autocomplete <prefix>          - Get word suggestions from titles");
+        System.out.println("  topics <YYYY-MM>               - Top 10 suggested words for a month");
+        System.out.println("  trends <topic> <start> <end>   - Monthly frequency of a topic");
+        System.out.println("  articles <start_date> <end>    - List articles in a date range");
+        System.out.println("  article <id>                   - View a specific article by URI");
+        System.out.println("  stats                          - Show total article count");
+        System.out.println("  help                           - Show this help message");
+        System.out.println("  menu                           - Return to main menu");
     }
 }
