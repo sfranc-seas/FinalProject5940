@@ -10,10 +10,10 @@ public class Article {
     private String body;
 
     public Article(String uri, String date, String title, String body) {
-        if (uri == null || uri.isBlank()) {
+        if (uri == null || uri.isEmpty()) {
             throw new IllegalArgumentException("URI cannot be null or empty.");
         }
-        if (title == null || title.isBlank()) {
+        if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be null or empty.");
         }
 
@@ -58,7 +58,7 @@ public class Article {
     // --- Optional Setters (safe to keep) ---
 
     public void setUri(String uri) {
-        if (uri == null || uri.isBlank()) {
+        if (uri == null || uri.isEmpty()) {
             throw new IllegalArgumentException("URI cannot be null or empty.");
         }
         this.uri = uri;
@@ -69,7 +69,7 @@ public class Article {
     }
 
     public void setTitle(String title) {
-        if (title == null || title.isBlank()) {
+        if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Title cannot be null or empty.");
         }
         this.title = title;

@@ -41,7 +41,7 @@ public class ArticleRepository {
     }
 
     public Article getArticleById(String id) {
-        if (id == null || id.isBlank()) {
+        if (id == null || id.isEmpty()) {
             return null;
         }
 

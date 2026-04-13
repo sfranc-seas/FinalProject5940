@@ -4,7 +4,6 @@
   <artifactId>FinalProject5940</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>FinalProject5940</name>
-
   <dependencies>
     <dependency>
       <groupId>com.opencsv</groupId>
@@ -18,8 +17,12 @@
       <version>3.20.0</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+    <groupId>com.google.code.gson</groupId>
+    <artifactId>gson</artifactId>
+    <version>2.11.0</version>
+</dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>

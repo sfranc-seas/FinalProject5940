@@ -21,7 +21,7 @@ public class SearchService {
     }
 
     public List<String> searchTitles(String query) {
-        if (query == null || query.isBlank()) {
+        if (query == null || query.isEmpty()) {
             return new ArrayList<>();
         }
 

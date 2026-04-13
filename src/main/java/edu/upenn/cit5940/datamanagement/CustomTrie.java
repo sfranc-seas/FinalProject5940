@@ -40,7 +40,7 @@ public class CustomTrie {
     	
     	Node currentNode = root;
     	
-    	if (word == null || word.isBlank()) 
+    	if (word == null || word.isEmpty()) 
     		return;
     	
     	//loop until the word length
@@ -74,7 +74,7 @@ public class CustomTrie {
     	
     	Node currentNode = root;
     	//return if the word is null or empty
-    	if(word == null || word.isBlank())
+    	if(word == null || word.isEmpty())
     		return false;
     	
     	for(int i=0; i<word.length(); i++)
@@ -102,7 +102,7 @@ public class CustomTrie {
 
     // TODO
     public void deleteWord(String word) {
-    	if (word == null || word.isBlank()) 
+    	if (word == null || word.isEmpty()) 
     		return ;
     	
     	//check if the word exists
@@ -190,7 +190,7 @@ public class CustomTrie {
 
         List<String> results = new ArrayList<>();
 
-        if (prefix == null || prefix.isBlank()) {
+        if (prefix == null || prefix.isEmpty()) {
             return results;
         }
 

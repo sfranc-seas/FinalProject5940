@@ -33,7 +33,7 @@ public class InvertedIndex {
     }
     
     public Set<Article> search(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
+        if (keyword == null || keyword.isEmpty()) {
             return new HashSet<>();
         }
 
@@ -41,17 +41,20 @@ public class InvertedIndex {
     }
     
     public Set<Article> searchAll(String query) {
-        if (query == null || query.isBlank()) {
+        if (query == null || query.isEmpty()) {
             return new HashSet<>();
         }
 
         String[] tokens = query.toLowerCase().split("\\W+");
         Set<Article> result = null;
+        boolean hasUsableToken = false;
 
         for (String token : tokens) {
-            if (token.length() <= 1) {
+            if (token.length() <= 1 || stopWords.contains(token)) {
                 continue;
             }
+
+            hasUsableToken = true;
 
             Set<Article> current = index.get(token);
             if (current == null) {
@@ -63,6 +66,10 @@ public class InvertedIndex {
             } else {
                 result.retainAll(current);
             }
+        }
+
+        if (!hasUsableToken) {
+            return new HashSet<>();
         }
 
         return result == null ? new HashSet<>() : result;
@@ -80,7 +87,7 @@ public class InvertedIndex {
 
     private void indexText(Article article, String text) {
     	
-        if (text == null || text.isBlank()) {
+        if (text == null || text.isEmpty()) {
             return;
         }
 

@@ -16,3 +16,23 @@
 [2026-04-09 16:37:25] INFO Loading articles from: articles_small.csv
 [2026-04-09 16:38:18] INFO Loaded 100 articles from articles_small.csv
 [2026-04-09 16:38:18] INFO Architecture initialization complete
+[2026-04-12 18:47:07] INFO Application starting
+[2026-04-12 18:47:07] INFO Loading articles from: articles_small.csv
+[2026-04-12 18:47:07] INFO Loaded 100 articles from articles_small.csv
+[2026-04-12 18:47:07] INFO Architecture initialization complete
+[2026-04-12 18:47:16] INFO User selected Interactive Mode
+[2026-04-12 18:47:52] INFO Interactive trends: topic=ai start=2024-01 end=2024-01
+[2026-04-12 18:48:27] INFO Interactive trends: topic=ai start=2020-01 end=2026-01
+[2026-04-12 18:48:48] INFO Interactive search query: ai
+[2026-04-12 18:49:17] INFO Interactive trends: topic=chatgpt start=2020-01 end=2026-01
+[2026-04-12 18:51:49] INFO Interactive topics period: 2020-01
+[2026-04-12 18:52:28] INFO Interactive topics period: 2022-07
+[2026-04-12 18:52:52] INFO Interactive trends: topic=musk start=2022-01 end=2022-12
+[2026-04-12 19:37:51] INFO Application starting
+[2026-04-12 19:37:51] INFO Loading articles from: articles_small.json
+[2026-04-12 19:37:51] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 19:37:51] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 19:37:51] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 19:37:51] INFO Architecture initialization complete
+[2026-04-12 19:38:01] INFO User selected Interactive Mode
+[2026-04-12 19:38:26] WARN Invalid trends period range: 2010-01

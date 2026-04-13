@@ -239,7 +239,7 @@ public class ArticleCSVParser {
             return;
         }
 
-        if (rec.get(0) == null || rec.get(0).isBlank()) {
+        if (rec.get(0) == null || rec.get(0).isEmpty()) {
             throw new IllegalArgumentException("URI cannot be null or empty.");
         }
         

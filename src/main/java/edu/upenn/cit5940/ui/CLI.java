@@ -12,6 +12,7 @@ import edu.upenn.cit5940.processor.TopicService;
 import edu.upenn.cit5940.processor.ArticleDateService;
 import edu.upenn.cit5940.processor.AutocompleteService;
 import edu.upenn.cit5940.logging.Logger;
+import edu.upenn.cit5940.processor.TrendService;
 
 public class CLI {
 
@@ -19,17 +20,20 @@ public class CLI {
     private final AutocompleteService autocompleteService;
     private final TopicService topicService;
     private final ArticleDateService articleDateService;
+    private final TrendService trendService;
+    
     private final Logger logger;
     
     private final Scanner scanner;
     
     public CLI(SearchService searchService, AutocompleteService autocompleteService,
             TopicService topicService, ArticleDateService articleDateService,
-            Logger logger) {
+            TrendService trendService,Logger logger) {
         this.searchService = searchService;
         this.autocompleteService = autocompleteService;
         this.topicService = topicService;
         this.articleDateService = articleDateService;
+        this.trendService = trendService;
         this.logger = logger;
         this.scanner = new Scanner(System.in);
     }
@@ -143,9 +147,12 @@ public class CLI {
         System.out.print("Enter search keyword(s): ");
         String query = scanner.nextLine().trim();
         logger.logInfo("Interactive search query: " + query);
+        
         if (query.isEmpty()) {
             System.out.println("Usage: search <keyword>");
-        } else {
+        } 
+        else 
+        {
             List<String> titles = searchService.searchTitles(query);
             if (titles.isEmpty()) {
                 System.out.println("No articles found.");
@@ -193,22 +200,63 @@ public class CLI {
     private void interactiveTrends() {
         System.out.print("Enter topic word: ");
         String topic = scanner.nextLine().trim();
+        
         System.out.print("Enter start period (YYYY-MM): ");
         String start = scanner.nextLine().trim();
+        
+        while (true)
+        {
+	        if (!trendService.isValidPeriod(start)) {
+	            System.out.println("Invalid period format. Use YYYY-MM.");
+	            logger.logWarning("Invalid trends start period format: " + start);
+	            System.out.print("Enter start period (YYYY-MM): ");
+	            start = scanner.nextLine().trim();	            
+	        }
+	        else
+	        	break;	        
+        }
+        
+        java.time.YearMonth startMonth = java.time.YearMonth.parse(start);
+        
         System.out.print("Enter end period (YYYY-MM): ");
         String end = scanner.nextLine().trim();
+        
+        while (true)
+        {
+	        if (!trendService.isValidPeriod(end)) {
+	            System.out.println("Invalid period format. Use YYYY-MM.");
+	            logger.logWarning("Invalid trends start period format: " + end);
+	            System.out.print("Enter end period (YYYY-MM): ");
+	            end = scanner.nextLine().trim();	            
+	        }
+	        else
+	        {
+	        	java.time.YearMonth endMonth = java.time.YearMonth.parse(end);
+	        	
+	        	if (startMonth.isAfter(endMonth)) {
+	                System.out.println("Invalid period range. Start period cannot be after end period.");
+	                logger.logWarning("Invalid trends period range: " + end);
+	                System.out.print("Enter end period (YYYY-MM): ");
+	                end = scanner.nextLine().trim();	                
+	            }
+	        	else
+	        		break;
+	        }
+        }
+        
         logger.logInfo("Interactive trends: topic=" + topic + " start=" + start + " end=" + end);
 
-        if (!isValidPeriod(start) || !isValidPeriod(end)) {
-            System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
-        } else if (start.compareTo(end) > 0) {
-            System.out.println("Error: Invalid date provided. Start period cannot be after end period.");
-        } else {
-            Map<String, Integer> trends = topicService.getTrends(topic, start, end);
-            for (Map.Entry<String, Integer> e : trends.entrySet()) {
-                System.out.println(e.getKey() + ": " + e.getValue());
-            }
+         List<String> trendLines = trendService.getTrendData(topic, start, end);
+
+        if (trendLines.isEmpty()) {
+            System.out.println("No trend data found.");
+            return;
         }
+
+        for (String line : trendLines) {
+            System.out.println(line);
+        }
+        
         returnToMenu();
     }
 
@@ -321,7 +369,7 @@ public class CLI {
             } else if (commandLine.toLowerCase().startsWith("autocomplete ")) {
                 handleAutocomplete(commandLine);
             }  else if (commandLine.toLowerCase().startsWith("trends ")) {
-                handleTrends(commandLine.substring(7).trim());            
+                handleTrends(commandLine);            
             } else if (commandLine.toLowerCase().startsWith("article ")) {
                 handleArticle(commandLine);
             } else if (commandLine.toLowerCase().startsWith("topics ")) {
@@ -334,9 +382,10 @@ public class CLI {
         }
     }
     
-    private void handleTrends(String args) {
+    private void handleTrends(String commandLine) {
+    	String args = commandLine.substring(7).trim();
         String[] parts = args.split("\\s+");
-        if (parts.length < 3) {
+        if (parts.length != 3) {
             System.out.println("Usage: trends <topic> <start-YYYY-MM> <end-YYYY-MM>");
             return;
         }
@@ -345,17 +394,30 @@ public class CLI {
         String end = parts[2];
         logger.logInfo("Trends query: topic=" + topic + " start=" + start + " end=" + end);
 
-        if (!isValidPeriod(start) || !isValidPeriod(end)) {
-            System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
+        if (!trendService.isValidPeriod(start) || !trendService.isValidPeriod(end)) {
+            System.out.println("Invalid period format. Use YYYY-MM.");
+            logger.logWarning("Invalid trends period format: " + commandLine);
             return;
         }
-        if (start.compareTo(end) > 0) {
-            System.out.println("Error: Invalid date provided. Start period cannot be after end period.");
+
+        java.time.YearMonth startMonth = java.time.YearMonth.parse(start);
+        java.time.YearMonth endMonth = java.time.YearMonth.parse(end);
+
+        if (startMonth.isAfter(endMonth)) {
+            System.out.println("Invalid period range. Start period cannot be after end period.");
+            logger.logWarning("Invalid trends period range: " + commandLine);
             return;
         }
-        Map<String, Integer> trends = topicService.getTrends(topic, start, end);
-        for (Map.Entry<String, Integer> e : trends.entrySet()) {
-            System.out.println(e.getKey() + ": " + e.getValue());
+
+        List<String> trendLines = trendService.getTrendData(topic, start, end);
+
+        if (trendLines.isEmpty()) {
+            System.out.println("No trend data found.");
+            return;
+        }
+
+        for (String line : trendLines) {
+            System.out.println(line);
         }
     }
     

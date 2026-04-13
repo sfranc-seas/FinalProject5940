@@ -25,20 +25,20 @@ public class AutocompleteService {
     }
 
     private void indexTitleWords(String title) {
-        if (title == null || title.isBlank()) {
+        if (title == null || title.isEmpty()) {
             return;
         }
 
         String[] words = title.toLowerCase().split("\\W+");
         for (String word : words) {
-            if (!word.isBlank()) {
+            if (!word.isEmpty()) {
                 trie.insertWord(word);
             }
         }
     }
 
     public List<String> getSuggestions(String prefix) {
-        if (prefix == null || prefix.isBlank()) {
+        if (prefix == null || prefix.isEmpty()) {
             return new ArrayList<>();
         }
 
