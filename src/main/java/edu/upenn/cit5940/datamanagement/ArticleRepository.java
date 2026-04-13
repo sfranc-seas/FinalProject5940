@@ -6,15 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.logging.Logger;
 
 public class ArticleRepository {
 
     private final List<Article> articles;
     private final Map<String, Article> articlesById;
+    private final Logger logger;
 
-    public ArticleRepository() {
+    public ArticleRepository(Logger logger) {
         this.articles = new ArrayList<>();
         this.articlesById = new HashMap<>();
+        this.logger = logger;
     }
 
     public void addArticle(Article article) {
@@ -34,6 +37,8 @@ public class ArticleRepository {
         for (Article article : articleList) {
             addArticle(article);
         }
+
+        logger.logInfo("ArticleRepository: " + articles.size() + " article(s) loaded into repository");
     }
 
     public List<Article> getAllArticles() {

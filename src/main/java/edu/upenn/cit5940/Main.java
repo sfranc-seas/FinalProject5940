@@ -47,20 +47,20 @@ public class Main {
 			
 			logger.logInfo("Loaded " + stopWords.size() + " stop words from " + stopWordFile);
 
-			ArticleRepository repository = new ArticleRepository();
+			ArticleRepository repository = new ArticleRepository(logger);
 			repository.addAllArticles(articles);
 
-			InvertedIndex index = new InvertedIndex();
+			InvertedIndex index = new InvertedIndex(logger);
 			index.setStopWords(stopWords);
 			index.addAllArticles(articles);
 
 			CustomTrie trie = new CustomTrie();
-			AutocompleteService autocompleteService = new AutocompleteService(trie);
+			AutocompleteService autocompleteService = new AutocompleteService(trie, logger);
 			autocompleteService.indexArticles(articles);
 
-			SearchService searchService = new SearchService(index, repository);
-			TopicService topicService = new TopicService(articles);
-			ArticleDateService articleDateService = new ArticleDateService(articles);
+			SearchService searchService = new SearchService(index, repository, logger);
+			TopicService topicService = new TopicService(articles, logger);
+			ArticleDateService articleDateService = new ArticleDateService(articles, logger);
 			TrendService trendService = new TrendService(articles);
 
 			System.out.println(repository.size() + " articles loaded");

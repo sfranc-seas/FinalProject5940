@@ -9,21 +9,26 @@ import java.util.Set;
 import edu.upenn.cit5940.common.dto.Article;
 import edu.upenn.cit5940.datamanagement.ArticleRepository;
 import edu.upenn.cit5940.datamanagement.InvertedIndex;
+import edu.upenn.cit5940.logging.Logger;
 
 public class SearchService {
 
     private final InvertedIndex invertedIndex;
     private final ArticleRepository articleRepository;
+    private final Logger logger;
 
-    public SearchService(InvertedIndex invertedIndex, ArticleRepository articleRepository) {
+    public SearchService(InvertedIndex invertedIndex, ArticleRepository articleRepository, Logger logger) {
         this.invertedIndex = invertedIndex;
         this.articleRepository = articleRepository;
+        this.logger = logger;
     }
 
     public List<String> searchTitles(String query) {
         if (query == null || query.isEmpty()) {
             return new ArrayList<>();
         }
+
+        logger.logInfo("Search query: \"" + query + "\"");
 
         Set<Article> results = invertedIndex.searchAll(query);
         List<Article> sortedArticles = new ArrayList<>(results);
@@ -33,6 +38,12 @@ public class SearchService {
         List<String> titles = new ArrayList<>();
         for (Article article : sortedArticles) {
             titles.add(article.getTitle());
+        }
+
+        if (titles.isEmpty()) {
+            logger.logWarning("Search query \"" + query + "\" returned no results");
+        } else {
+            logger.logInfo("Search query \"" + query + "\" returned " + titles.size() + " result(s)");
         }
 
         return titles;

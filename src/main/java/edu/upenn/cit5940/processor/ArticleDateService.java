@@ -8,13 +8,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.logging.Logger;
 
 public class ArticleDateService {
 
     private final TreeMap<LocalDate, List<Article>> articlesByDate;
+    private final Logger logger;
 
-    public ArticleDateService(List<Article> articles) {
+    public ArticleDateService(List<Article> articles, Logger logger) {
         this.articlesByDate = new TreeMap<>();
+        this.logger = logger;
         indexArticles(articles);
     }
 
@@ -23,13 +26,18 @@ public class ArticleDateService {
             return;
         }
 
+        int skipped = 0;
         for (Article article : articles) {
             try {
                 LocalDate date = article.getPublishDate();
                 articlesByDate.computeIfAbsent(date, d -> new ArrayList<>()).add(article);
             } catch (Exception e) {
-                // skip bad article dates
+                skipped++;
             }
+        }
+
+        if (skipped > 0) {
+            logger.logWarning("ArticleDateService: skipped " + skipped + " article(s) with unparseable dates during indexing");
         }
     }
 
@@ -46,6 +54,7 @@ public class ArticleDateService {
         List<String> result = new ArrayList<>();
 
         if (!isValidDate(startDateText) || !isValidDate(endDateText)) {
+            logger.logWarning("Date range query rejected: invalid date(s) — start=\"" + startDateText + "\" end=\"" + endDateText + "\"");
             return result;
         }
 
@@ -53,8 +62,11 @@ public class ArticleDateService {
         LocalDate endDate = LocalDate.parse(endDateText);
 
         if (startDate.isAfter(endDate)) {
+            logger.logWarning("Date range query rejected: start date " + startDateText + " is after end date " + endDateText);
             return result;
         }
+
+        logger.logInfo("Date range query: " + startDateText + " to " + endDateText);
 
         Map<LocalDate, List<Article>> range = articlesByDate.subMap(startDate, true, endDate, true);
 
@@ -62,6 +74,12 @@ public class ArticleDateService {
             for (Article article : entry.getValue()) {
                 result.add(article.getTitle());
             }
+        }
+
+        if (result.isEmpty()) {
+            logger.logWarning("Date range query [" + startDateText + " to " + endDateText + "] returned no results");
+        } else {
+            logger.logInfo("Date range query [" + startDateText + " to " + endDateText + "] returned " + result.size() + " article(s)");
         }
 
         return result;

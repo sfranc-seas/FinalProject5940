@@ -2,15 +2,18 @@ package edu.upenn.cit5940.datamanagement;
 
 import java.util.*;
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.logging.Logger;
 
 public class InvertedIndex {
 
     private Map<String, Set<Article>> index;
     private Set<String> stopWords;
+    private final Logger logger;
 
-    public InvertedIndex() {
+    public InvertedIndex(Logger logger) {
     	  this.index = new HashMap<>();
     	  this.stopWords = new HashSet<>();
+    	  this.logger = logger;
     }
 
     public void addArticle(Article article) {
@@ -30,6 +33,8 @@ public class InvertedIndex {
         for (Article article : articles) {
             addArticle(article);
         }
+
+        logger.logInfo("InvertedIndex: index built from " + articles.size() + " article(s). Total unique terms: " + index.size());
     }
     
     public Set<Article> search(String keyword) {

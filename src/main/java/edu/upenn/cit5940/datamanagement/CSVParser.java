@@ -18,17 +18,19 @@ public class CSVParser implements Parser {
     public List<Article> parse(String filePath) {
         List<Article> articles = new ArrayList<>();
 
+        logger.logInfo("CSVParser: starting parse of file: " + filePath);
+
         try (CharacterReader reader = new CharacterReader(filePath)) {
-        	
+
             ArticleCSVParser parser = new ArticleCSVParser(reader, logger);
             articles = parser.readAllArticles();  // now returns List<Article>
-        } 
-        catch (IOException | CSVFormatException e) 
-        {
-        	logger.logError("Failed to parse CSV file: " + filePath + ". Reason: " + e.getMessage());
+
+        } catch (IOException | CSVFormatException e) {
+            logger.logError("Failed to parse CSV file: " + filePath + ". Reason: " + e.getMessage());
             throw new RuntimeException("Error parsing CSV file", e);
-            
         }
+
+        logger.logInfo("CSVParser: parse complete. " + articles.size() + " article(s) loaded from " + filePath);
 
         return articles;
     }
