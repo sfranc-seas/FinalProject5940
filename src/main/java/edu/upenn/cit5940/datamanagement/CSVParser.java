@@ -16,6 +16,7 @@ public class CSVParser implements Parser {
     
     @Override
     public List<Article> parse(String filePath) {
+    	
         List<Article> articles = new ArrayList<>();
 
         logger.logInfo("CSVParser: starting parse of file: " + filePath);
