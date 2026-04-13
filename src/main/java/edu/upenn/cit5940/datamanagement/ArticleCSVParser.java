@@ -16,14 +16,17 @@ package edu.upenn.cit5940.datamanagement;
 import java.io.*;
 import java.util.*;
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.logging.Logger;
 
 public class ArticleCSVParser {
     private final CharacterReader reader;
     private int iLine = 1;
     private int iRecord = 1;
-
-    public ArticleCSVParser(CharacterReader reader) {
+    private final Logger logger;
+    
+    public ArticleCSVParser(CharacterReader reader, Logger logger) {
         this.reader = reader;
+        this.logger = logger;
     }
 
     // The states for the Finite State Machine (FSM).
@@ -231,7 +234,9 @@ public class ArticleCSVParser {
         // TODO: Add code here
     	if (rec == null || rec.size() != 16) {
     		
-    		throw new IllegalArgumentException();   		 
+    		//throw new IllegalArgumentException();
+    		logger.logWarning("Skipping malformed CSV record: incorrect field count");
+    		return;
     	}
     	
         // Skip header row
@@ -240,7 +245,9 @@ public class ArticleCSVParser {
         }
 
         if (rec.get(0) == null || rec.get(0).isEmpty()) {
-            throw new IllegalArgumentException("URI cannot be null or empty.");
+            //throw new IllegalArgumentException("URI cannot be null or empty.");
+        	logger.logWarning("Skipping malformed CSV record: missing URI");
+        	return;
         }
         
         try {
@@ -254,7 +261,7 @@ public class ArticleCSVParser {
         		articles.add(article);
         } catch (Exception e) {
             // Convert to required exception type
-            
+        	logger.logWarning("Skipping malformed CSV record.");
         }
     }
 }

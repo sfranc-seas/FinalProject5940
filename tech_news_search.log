@@ -36,3 +36,114 @@
 [2026-04-12 19:37:51] INFO Architecture initialization complete
 [2026-04-12 19:38:01] INFO User selected Interactive Mode
 [2026-04-12 19:38:26] WARN Invalid trends period range: 2010-01
+[2026-04-12 20:29:44] INFO Application starting
+[2026-04-12 20:29:44] INFO Loading articles from: articles_small.csv
+[2026-04-12 20:29:44] INFO Selected parser based on file extension: articles_small.csv
+[2026-04-12 20:29:44] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 20:29:44] INFO Loaded 100 articles from articles_small.csv
+[2026-04-12 20:29:44] INFO Architecture initialization complete
+[2026-04-12 20:29:50] INFO User selected Interactive Mode
+[2026-04-12 20:29:55] INFO Interactive search query: ai
+[2026-04-12 20:30:07] INFO User selected Exit
+[2026-04-12 20:30:07] INFO Application exiting
+[2026-04-12 20:30:21] INFO Application starting
+[2026-04-12 20:30:21] INFO Loading articles from: articles_small.csv
+[2026-04-12 20:30:21] INFO Selected parser based on file extension: articles_small.csv
+[2026-04-12 20:30:21] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 20:30:21] INFO Loaded 100 articles from articles_small.csv
+[2026-04-12 20:30:21] INFO Architecture initialization complete
+[2026-04-12 20:32:02] INFO User selected Exit
+[2026-04-12 20:32:02] INFO Application exiting
+[2026-04-12 22:12:08] INFO Application starting
+[2026-04-12 22:12:08] INFO Loading articles from: articles_small.json
+[2026-04-12 22:12:08] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:12:08] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:12:08] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:12:08] INFO Architecture initialization complete
+[2026-04-12 22:12:15] INFO User selected Command Mode
+[2026-04-12 22:12:47] INFO User command: trends
+[2026-04-12 22:12:54] INFO User command: help
+[2026-04-12 22:13:06] INFO User command: trends topic
+[2026-04-12 22:13:50] INFO User command: trends
+[2026-04-12 22:14:23] INFO Application starting
+[2026-04-12 22:14:23] INFO Loading articles from: articles_small.json
+[2026-04-12 22:14:36] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:14:36] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:14:36] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:14:36] INFO Architecture initialization complete
+[2026-04-12 22:14:42] INFO User selected Command Mode
+[2026-04-12 22:15:28] INFO User command: trends
+[2026-04-12 22:16:18] INFO Application starting
+[2026-04-12 22:16:18] INFO Loading articles from: articles_small.json
+[2026-04-12 22:16:18] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:16:18] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:16:18] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:16:18] INFO Architecture initialization complete
+[2026-04-12 22:16:21] INFO User selected Command Mode
+[2026-04-12 22:16:24] INFO User command: trends
+[2026-04-12 22:16:42] INFO User command: trends
+[2026-04-12 22:17:03] INFO Application starting
+[2026-04-12 22:17:04] INFO Loading articles from: articles_small.json
+[2026-04-12 22:17:04] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:17:04] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:17:04] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:17:04] INFO Architecture initialization complete
+[2026-04-12 22:17:07] INFO User selected Command Mode
+[2026-04-12 22:17:17] INFO User command: trends
+[2026-04-12 22:18:25] INFO Application starting
+[2026-04-12 22:18:25] INFO Loading articles from: articles_small.json
+[2026-04-12 22:18:25] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:18:25] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:18:25] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:18:25] INFO Architecture initialization complete
+[2026-04-12 22:18:33] INFO User selected Command Mode
+[2026-04-12 22:18:37] INFO User command: trends
+[2026-04-12 22:18:37] ERROR Fatal startup error: String index out of range: -1
+[2026-04-12 22:18:37] INFO Application exiting
+[2026-04-12 22:19:02] INFO Application starting
+[2026-04-12 22:19:02] INFO Loading articles from: articles_small.json
+[2026-04-12 22:19:02] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:19:02] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:19:02] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:19:02] INFO Architecture initialization complete
+[2026-04-12 22:19:05] INFO User selected Command Mode
+[2026-04-12 22:19:13] INFO Application starting
+[2026-04-12 22:19:13] INFO Loading articles from: articles_small.json
+[2026-04-12 22:19:13] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:19:13] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:19:13] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:19:13] INFO Architecture initialization complete
+[2026-04-12 22:19:33] INFO User selected Command Mode
+[2026-04-12 22:19:41] INFO User command: trends
+[2026-04-12 22:19:41] ERROR Fatal startup error: String index out of range: -1
+[2026-04-12 22:19:41] INFO Application exiting
+[2026-04-12 22:19:46] INFO Application starting
+[2026-04-12 22:19:46] INFO Loading articles from: articles_small.json
+[2026-04-12 22:19:46] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:19:46] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:19:46] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:19:46] INFO Architecture initialization complete
+[2026-04-12 22:19:49] INFO User selected Command Mode
+[2026-04-12 22:20:02] INFO User command: trends
+[2026-04-12 22:45:01] INFO Application starting
+[2026-04-12 22:45:01] INFO Loading articles from: articles_small.json
+[2026-04-12 22:45:01] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:45:01] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:45:02] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:45:02] INFO Architecture initialization complete
+[2026-04-12 22:45:06] INFO User selected Interactive Mode
+[2026-04-12 22:46:37] INFO Interactive articles range: 2024-12-01 to 2025-12-02
+[2026-04-12 22:47:38] INFO Application starting
+[2026-04-12 22:47:43] INFO Loading articles from: articles_small.json
+[2026-04-12 22:48:35] INFO Application starting
+[2026-04-12 22:48:35] INFO Loading articles from: articles_small.json
+[2026-04-12 22:48:35] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 22:48:36] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 22:48:36] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 22:48:36] INFO Architecture initialization complete
+[2026-04-12 22:49:14] INFO Application starting
+[2026-04-12 22:49:14] INFO Loading articles from: articles.csv
+[2026-04-12 22:49:14] INFO Selected parser based on file extension: articles.csv
+[2026-04-12 22:49:14] ERROR Failed to parse CSV file: articles.csv. Reason: articles.csv
+[2026-04-12 22:49:14] ERROR Fatal startup error: Error parsing CSV file
+[2026-04-12 22:49:14] INFO Application exiting

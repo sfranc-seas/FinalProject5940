@@ -17,15 +17,15 @@ package edu.upenn.cit5940.datamanagement;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class CustomTrie {
 
     // inner class
     private class Node {
-        private HashMap<Character, Node> children = new HashMap<>();
+    	private Map<Character, Node> children = new TreeMap<>();
 
         // TODO (provide starting value)
         private boolean endOfWord = false;

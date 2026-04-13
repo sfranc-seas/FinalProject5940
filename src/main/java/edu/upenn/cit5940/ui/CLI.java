@@ -167,6 +167,7 @@ public class CLI {
         System.out.print("Enter prefix for autocomplete: ");
         String prefix = scanner.nextLine().trim();
         logger.logInfo("Interactive autocomplete prefix: " + prefix);
+        
         if (prefix.isEmpty()) {
             System.out.println("Usage: autocomplete <prefix>");
         } else {
@@ -184,16 +185,26 @@ public class CLI {
         System.out.print("Enter period (YYYY-MM): ");
         String period = scanner.nextLine().trim();
         logger.logInfo("Interactive topics period: " + period);
-        if (!isValidPeriod(period)) {
-            System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
-        } else {
-            List<String> topics = topicService.getTopTopics(period);
-            if (topics.isEmpty()) {
-                System.out.println("No topics found.");
-            } else {
-                for (String t : topics) System.out.println(t);
-            }
+        
+        while(true)
+        {
+        	if (!isValidPeriod(period)) {
+        		System.out.println("Invalid date. Please use the YYYY-MM format with valid values.");
+        		logger.logWarning("Interactive topics invalid period: " + period);
+        		System.out.print("Enter period (YYYY-MM): ");
+                period = scanner.nextLine().trim();
+        	}
+        	else
+        		break;
         }
+        
+        List<String> topics = topicService.getTopTopics(period);
+        if (topics.isEmpty()) {
+            System.out.println("No topics found.");
+        } else {
+            for (String t : topics) System.out.println(t);
+        }
+        
         returnToMenu();
     }
 
@@ -261,24 +272,59 @@ public class CLI {
     }
 
     private void interactiveArticlesByDate() {
+    	
         System.out.print("Enter start date (YYYY-MM-DD): ");
         String startDate = scanner.nextLine().trim();
+        
+        while (true)
+        {
+        	if (!isValidDate(startDate)) {
+                System.out.println("Error: Invalid date provided. Please use the YYYY-MM-DD format with valid values.");
+                System.out.print("Enter start date (YYYY-MM-DD): ");
+                startDate = scanner.nextLine().trim();
+            }
+        	else
+        		break;
+        }
+        
+        LocalDate start = LocalDate.parse(startDate);
+        
         System.out.print("Enter end date (YYYY-MM-DD): ");
         String endDate = scanner.nextLine().trim();
+        
+        while(true)
+        {
+        	if (!isValidDate(endDate)) {
+                System.out.println("Error: Invalid date provided. Please use the YYYY-MM-DD format with valid values.");
+                System.out.print("Enter start date (YYYY-MM-DD): ");
+                endDate = scanner.nextLine().trim();
+                
+        	}
+        	else
+        	{
+        		LocalDate end = LocalDate.parse(endDate);
+        		
+        		if (start.isAfter(end)) {
+        			System.out.println("Error: Invalid date provided. Start date cannot be after end date.");
+        			System.out.print("Enter end date (YYYY-MM-DD): ");
+        			endDate = scanner.nextLine().trim();
+        			
+        		}
+        		
+        		else
+        			break;
+        	}
+        }
+        
         logger.logInfo("Interactive articles range: " + startDate + " to " + endDate);
 
-        if (!isValidDate(startDate) || !isValidDate(endDate)) {
-            System.out.println("Error: Invalid date provided. Please use the YYYY-MM-DD format with valid values.");
-        } else if (LocalDate.parse(startDate).isAfter(LocalDate.parse(endDate))) {
-            System.out.println("Error: Invalid date provided. Start date cannot be after end date.");
+        List<String> titles = articleDateService.getArticleTitlesInRange(startDate, endDate);
+        if (titles.isEmpty()) {
+            System.out.println("No articles found.");
         } else {
-            List<String> titles = articleDateService.getArticleTitlesInRange(startDate, endDate);
-            if (titles.isEmpty()) {
-                System.out.println("No articles found.");
-            } else {
-                for (String t : titles) System.out.println(t);
-            }
+            for (String t : titles) System.out.println(t);
         }
+        
         returnToMenu();
     }
 
@@ -364,17 +410,17 @@ public class CLI {
                 printCommandHelp();
             } else if (commandLine.equalsIgnoreCase("stats")) {
                 handleStats();
-            } else if (commandLine.toLowerCase().startsWith("search ")) {
+            } else if (commandLine.toLowerCase().startsWith("search")) {
                 handleSearch(commandLine);
-            } else if (commandLine.toLowerCase().startsWith("autocomplete ")) {
+            } else if (commandLine.toLowerCase().startsWith("autocomplete")) {
                 handleAutocomplete(commandLine);
-            }  else if (commandLine.toLowerCase().startsWith("trends ")) {
+            }  else if (commandLine.toLowerCase().startsWith("trends")) {
                 handleTrends(commandLine);            
-            } else if (commandLine.toLowerCase().startsWith("article ")) {
+            } else if (commandLine.toLowerCase().startsWith("article")) {
                 handleArticle(commandLine);
-            } else if (commandLine.toLowerCase().startsWith("topics ")) {
+            } else if (commandLine.toLowerCase().startsWith("topics")) {
                 handleTopics(commandLine);            
-            } else if (commandLine.toLowerCase().startsWith("articles ")) {
+            } else if (commandLine.toLowerCase().startsWith("articles")) {
                 handleArticles(commandLine);            
             } else {
                 System.out.println("Unknown command. Type 'help' for available commands.");
@@ -383,6 +429,13 @@ public class CLI {
     }
     
     private void handleTrends(String commandLine) {
+    	
+    	if(commandLine.length() <= 6 )
+    	{
+    		logger.logWarning("Invalid command.Usage: trends <topic> <start-YYYY-MM> <end-YYYY-MM>");
+    		System.out.println("Usage: trends <topic> <start-YYYY-MM> <end-YYYY-MM>");
+            return;
+    	}
     	String args = commandLine.substring(7).trim();
         String[] parts = args.split("\\s+");
         if (parts.length != 3) {
@@ -422,6 +475,13 @@ public class CLI {
     }
     
     private void handleAutocomplete(String commandLine) {
+    	if(commandLine.length() <= 12 )
+    	{
+    		logger.logWarning("Invalid command.Usage: autocomplete <prefix>");
+    		System.out.println("Invalid Command. Usage: autocomplete <prefix>");
+            return;
+    	}
+    	
         String prefix = commandLine.substring(13).trim();
         logger.logInfo("Autocomplete prefix: " + prefix);
         
@@ -442,6 +502,13 @@ public class CLI {
         }
     }
     private void handleSearch(String commandLine) {
+    	if(commandLine.length() <= 6 )
+    	{
+    		logger.logWarning("Invalid command.Usage: search <keyword>");
+    		System.out.println("Invalid Command. Usage: search <keyword>");
+            return;
+    	}
+    	
         String query = commandLine.substring(7).trim();
         
         logger.logInfo("Search query: " + query);
@@ -465,6 +532,13 @@ public class CLI {
     }
 
     private void handleArticle(String commandLine) {
+    	if(commandLine.length() <= 7 )
+    	{
+    		logger.logWarning("Invalid command.Usage: article <id>");
+    		System.out.println("Invalid Command. Usage: article <id>");
+            return;
+    	}
+    	
         String id = commandLine.substring(8).trim();
         
         logger.logInfo("Article lookup by id: " + id);
@@ -488,7 +562,14 @@ public class CLI {
     }
 
     private void handleTopics(String commandLine) {
-
+    	
+    	if(commandLine.length() <= 6 )
+    	{
+    		logger.logWarning("Invalid command.Usage: topics <period>");
+    		System.out.println("Invalid Command. Usage: topics <period>");
+            return;
+    	}
+    	
         String period = commandLine.substring(7).trim();
         logger.logInfo("Topics query for period: " + period);
         
@@ -510,6 +591,13 @@ public class CLI {
     }
     
     private void handleArticles(String commandLine) {
+    	if(commandLine.length() <= 8 )
+    	{
+    		logger.logWarning("Invalid command.Usage: articles <start_date> <end_date>");
+    		System.out.println("Invalid Command. Usage: articles <start_date> <end_date>");
+            return;
+    	}
+    	
         String args = commandLine.substring(9).trim();
         String[] parts = args.split("\\s+");
         

@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import edu.upenn.cit5940.common.dto.Article;
+import edu.upenn.cit5940.logging.Logger;
 
 public class JSONParser implements Parser {
 
@@ -20,6 +21,12 @@ public class JSONParser implements Parser {
         String body;
     }
 
+    private final Logger logger;
+
+    public JSONParser(Logger logger) {
+        this.logger = logger;
+    }
+    
     @Override
     public List<Article> parse(String filePath) {
         List<Article> articles = new ArrayList<>();
@@ -47,10 +54,12 @@ public class JSONParser implements Parser {
                     articles.add(article);
                 } catch (IllegalArgumentException e) {
                     // skip malformed JSON record
+                	logger.logWarning("Skipping malformed JSON record: missing required fields");
                 }
             }
 
         } catch (IOException e) {
+        	logger.logError("Failed to parse JSON file: " + filePath + ". Reason: " + e.getMessage());
             throw new RuntimeException("Failed to parse JSON file: " + filePath, e);
         }
 

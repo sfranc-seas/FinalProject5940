@@ -6,8 +6,15 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class StopWordLoader {
+import edu.upenn.cit5940.logging.Logger;
 
+public class StopWordLoader {
+	
+	private final Logger logger;
+	public StopWordLoader(Logger logger)
+	{
+		this.logger = logger;
+	}
     public Set<String> loadStopWords(String filePath) {
         Set<String> stopWords = new HashSet<>();
 
@@ -23,6 +30,7 @@ public class StopWordLoader {
             }
         } catch (IOException e) {
             //Add logs for error
+        	logger.logWarning("Failed to load stop words file: " + filePath);
         }
 
         return stopWords;

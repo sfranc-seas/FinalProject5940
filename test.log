@@ -1,0 +1,8 @@
+[2026-04-12 20:33:31] INFO Application starting
+[2026-04-12 20:33:31] INFO Loading articles from: articles_small.json
+[2026-04-12 20:33:31] INFO Selected parser based on file extension: articles_small.json
+[2026-04-12 20:33:32] INFO Loaded 606 stop words from stop_words.txt
+[2026-04-12 20:33:32] INFO Loaded 100 articles from articles_small.json
+[2026-04-12 20:33:32] INFO Architecture initialization complete
+[2026-04-12 20:33:55] INFO User selected Exit
+[2026-04-12 20:33:55] INFO Application exiting
