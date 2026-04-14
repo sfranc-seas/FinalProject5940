@@ -54,7 +54,7 @@ public class ArticleDateService {
         List<String> result = new ArrayList<>();
 
         if (!isValidDate(startDateText) || !isValidDate(endDateText)) {
-            logger.logWarning("Date range query rejected: invalid date(s) — start=\"" + startDateText + "\" end=\"" + endDateText + "\"");
+            logger.logWarning("Date range query rejected: invalid date(s) start=\"" + startDateText + "\" end=\"" + endDateText + "\"");
             return result;
         }
 
