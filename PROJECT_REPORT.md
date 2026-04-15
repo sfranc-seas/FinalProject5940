@@ -115,23 +115,27 @@ All tiers receive the same `Logger` instance injected via constructors.
 
 **Implementation:**
 ```java
-// Strategy interface
+// Parser.java — the Strategy interface
 public interface Parser {
     List<Article> parse(String filePath);
 }
 
-// Factory selects the concrete strategy based on file extension
-public class ParserFactory {
-    public static Parser getParser(String filePath) {
-        if (filePath != null && filePath.toLowerCase().endsWith(".json")) {
-            return new JSONParser();
-        }
-        return new CSVParser();  // default
-    }
+// CSVParser.java — concrete strategy A
+public class CSVParser implements Parser {
+    @Override
+    public List<Article> parse(String filePath) { /* FSM-based CSV parsing */ }
 }
 
-// In Main.java  caller is decoupled from concrete parsers:
-Parser parser = ParserFactory.getParser(dataFile);
+// JSONParser.java — concrete strategy B
+public class JSONParser implements Parser {
+    @Override
+    public List<Article> parse(String filePath) { /* Gson-based JSON parsing */ }
+}
+```
+
+```java
+// Main.java — caller works only against the interface, unaware of the concrete type
+Parser parser = parserFactory.getParser(dataFile);
 List<Article> articles = parser.parse(dataFile);
 ```
 
